@@ -1,0 +1,41 @@
+name: livros_app
+description: App para escanear ISBN de livros e salvar em planilha Excel local.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # Leitura de código de barras (ISBN em EAN-13)
+  mobile_scanner: ^5.2.3
+
+  # Leitura/escrita de arquivos .xlsx
+  excel: ^4.0.6
+
+  # Encontrar pastas do sistema de arquivos do dispositivo
+  path_provider: ^2.1.4
+
+  # Pedir permissão de câmera/armazenamento em runtime
+  permission_handler: ^11.3.1
+
+  # Requisições HTTP para consultar dados do livro pelo ISBN
+  http: ^1.2.2
+
+  # Parser HTML para sites que não fornecem API (ex: CBL Serviços)
+  html: ^0.15.4
+
+  # Abrir o arquivo .xlsx gerado com o app padrão do usuário
+  open_filex: ^4.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

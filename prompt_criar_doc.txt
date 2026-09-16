@@ -1,0 +1,830 @@
+# Documentação completa do projeto Flutter
+
+Quero que você faça uma análise completa deste projeto Flutter e, com base exclusivamente no código e nos arquivos reais do projeto, crie ou atualize o arquivo:
+
+`README.md`
+
+O objetivo deste README é documentar detalhadamente como o projeto está estruturado, como ele funciona e quais padrões e decisões técnicas foram utilizados.
+
+Esse documento deverá ser útil tanto para desenvolvedores humanos quanto para uma IA que futuramente precise entender, manter, corrigir ou desenvolver novas funcionalidades neste projeto.
+
+---
+
+# 1. Regra principal: primeiro investigar, depois documentar
+
+**Não comece escrevendo o README imediatamente.**
+
+Primeiro analise o projeto.
+
+Você deve explorar a estrutura de diretórios e arquivos e entender como as diferentes partes do sistema se relacionam.
+
+A documentação deve representar a implementação **real e atual** do projeto.
+
+Não assuma que o projeto utiliza uma arquitetura apenas porque ela é comum em aplicações Flutter.
+
+Por exemplo, não presuma que o projeto utiliza:
+
+* Clean Architecture;
+* MVVM;
+* MVC;
+* Bloc;
+* Riverpod;
+* Provider;
+* GetX;
+* Repository Pattern;
+* qualquer outro padrão;
+
+a menos que isso seja confirmado pelo código.
+
+Se existir uma arquitetura própria ou uma combinação de padrões, documente o que realmente existe.
+
+---
+
+# 2. Arquivos que devem ser analisados
+
+Comece analisando:
+
+* `pubspec.yaml`
+* `analysis_options.yaml`
+* `README.md`, caso já exista
+* `.env` / `.env.example`, caso existam
+* arquivos de configuração relevantes
+* estrutura de `lib/`
+* estrutura de `test/`
+* arquivos de configuração do Android
+* arquivos de configuração do iOS
+* demais arquivos relevantes do projeto
+
+Não é necessário documentar arquivos gerados automaticamente pelo Flutter se eles não contribuírem para a compreensão da arquitetura.
+
+---
+
+# 3. Análise completa da estrutura
+
+Mapeie a estrutura real do projeto.
+
+Identifique:
+
+* diretórios principais;
+* responsabilidade de cada diretório;
+* módulos;
+* funcionalidades;
+* camadas;
+* componentes;
+* serviços;
+* modelos;
+* repositories;
+* providers/controllers/notifiers/blocs, caso existam;
+* páginas/telas;
+* widgets;
+* utilitários;
+* configurações;
+* recursos/assets.
+
+Para cada diretório importante, explique:
+
+* qual é sua finalidade;
+* que tipo de código fica ali;
+* como ele se relaciona com outras partes do projeto.
+
+Não documente apenas a árvore de arquivos.
+
+Explique a responsabilidade arquitetural de cada parte.
+
+---
+
+# 4. Arquitetura da aplicação
+
+Identifique como a aplicação está arquitetada atualmente.
+
+Explique:
+
+* como a aplicação inicia;
+* qual é o ponto de entrada;
+* como o `MaterialApp`/`CupertinoApp` é configurado;
+* como os módulos são organizados;
+* como as telas são estruturadas;
+* como os componentes são reutilizados;
+* como os dados fluem pela aplicação;
+* onde fica a lógica de negócio;
+* onde fica o acesso a dados;
+* como as dependências são organizadas;
+* como o estado da aplicação é gerenciado.
+
+Se houver uma arquitetura em camadas, explique o fluxo entre elas.
+
+Por exemplo, se realmente existir algo semelhante a:
+
+```text
+UI
+ ↓
+Controller / ViewModel / Bloc
+ ↓
+Service / UseCase
+ ↓
+Repository
+ ↓
+Data Source / API / Database
+```
+
+documente esse fluxo.
+
+Mas **não crie essa estrutura na documentação se o projeto não funcionar dessa maneira**.
+
+---
+
+# 5. Fluxo de inicialização
+
+Identifique o caminho percorrido pela aplicação desde o momento em que o Flutter inicia.
+
+Documente, quando aplicável:
+
+```text
+main()
+ ↓
+inicialização
+ ↓
+configuração de dependências
+ ↓
+configuração de estado
+ ↓
+configuração de rotas
+ ↓
+tela inicial
+```
+
+Explique quais arquivos participam desse processo.
+
+Se existirem inicializações assíncronas, documente-as.
+
+Exemplos:
+
+* Firebase;
+* banco local;
+* APIs;
+* autenticação;
+* carregamento de configurações;
+* serviços externos;
+* notificações;
+* armazenamento local.
+
+---
+
+# 6. Navegação e rotas
+
+Identifique como a navegação funciona.
+
+Documente:
+
+* sistema de rotas utilizado;
+* rotas nomeadas, se existirem;
+* navegação direta;
+* navegação declarativa;
+* parâmetros;
+* rotas protegidas;
+* fluxo de autenticação;
+* tela inicial;
+* navegação entre módulos.
+
+Se existir um arquivo central de rotas, indique sua localização.
+
+Explique como uma nova tela deve ser adicionada seguindo o padrão atual do projeto.
+
+---
+
+# 7. Gerenciamento de estado
+
+Identifique exatamente qual solução o projeto utiliza para gerenciamento de estado.
+
+Pode ser, por exemplo:
+
+* `setState`;
+* Provider;
+* Riverpod;
+* Bloc/Cubit;
+* ChangeNotifier;
+* ValueNotifier;
+* GetX;
+* solução própria;
+* combinação de diferentes abordagens.
+
+Documente:
+
+* onde os estados ficam;
+* como são criados;
+* como são consumidos;
+* como ocorre a atualização;
+* como a UI reage às mudanças;
+* como os estados são compartilhados entre telas.
+
+Se houver diferentes mecanismos para diferentes partes do projeto, documente isso.
+
+Não tente padronizar ou sugerir uma solução diferente.
+
+O objetivo é documentar o que existe.
+
+---
+
+# 8. Comunicação com APIs
+
+Identifique se o projeto se comunica com APIs externas.
+
+Documente:
+
+* biblioteca utilizada (`http`, Dio, Retrofit etc.);
+* localização dos clientes;
+* configuração da URL base;
+* autenticação;
+* headers;
+* interceptors;
+* tratamento de erros;
+* serialização;
+* desserialização;
+* modelos de request;
+* modelos de response;
+* repositories/services responsáveis pelas chamadas.
+
+Explique o fluxo:
+
+```text
+Tela
+ ↓
+Estado / Controller
+ ↓
+Service / Repository
+ ↓
+HTTP Client
+ ↓
+API
+ ↓
+Response
+ ↓
+Model
+ ↓
+Estado
+ ↓
+UI
+```
+
+Somente utilize esse fluxo se ele corresponder à implementação real.
+
+---
+
+# 9. Persistência e armazenamento local
+
+Verifique se o projeto possui armazenamento local.
+
+Procure por tecnologias como:
+
+* SQLite;
+* Drift;
+* Hive;
+* Isar;
+* SharedPreferences;
+* Secure Storage;
+* arquivos locais;
+* outras soluções.
+
+Se existir persistência, documente:
+
+* tecnologia;
+* localização da implementação;
+* entidades/tabelas;
+* models;
+* repositories;
+* migrations;
+* inicialização;
+* leitura;
+* escrita;
+* atualização;
+* exclusão.
+
+Explique como os dados chegam até a UI.
+
+---
+
+# 10. Modelos e entidades
+
+Identifique os principais modelos utilizados no projeto.
+
+Para cada grupo importante de modelos, explique:
+
+* onde estão;
+* sua finalidade;
+* relacionamento com API;
+* relacionamento com banco local;
+* conversões;
+* serialização;
+* campos importantes.
+
+Não é necessário transformar o README em uma listagem gigantesca de todos os atributos de todos os modelos.
+
+Priorize informações úteis para manutenção e desenvolvimento futuro.
+
+---
+
+# 11. Widgets e componentes reutilizáveis
+
+Identifique componentes reutilizáveis.
+
+Documente:
+
+* onde estão;
+* qual problema resolvem;
+* quais são genéricos;
+* quais são específicos de uma funcionalidade;
+* como devem ser reutilizados.
+
+Diferencie:
+
+```text
+Componentes compartilhados
+```
+
+de:
+
+```text
+Componentes específicos de uma funcionalidade
+```
+
+se essa separação existir no projeto.
+
+---
+
+# 12. Tema e identidade visual
+
+Analise como o projeto controla:
+
+* cores;
+* tipografia;
+* espaçamentos;
+* tamanhos;
+* bordas;
+* sombras;
+* tema claro/escuro;
+* componentes visuais;
+* design system.
+
+Identifique onde essas configurações ficam.
+
+Se existir um sistema de Design Tokens ou tema centralizado, documente.
+
+Explique como uma nova tela deve utilizar o sistema visual existente.
+
+---
+
+# 13. Assets e recursos
+
+Analise:
+
+* imagens;
+* ícones;
+* fontes;
+* arquivos JSON;
+* arquivos SVG;
+* outros assets.
+
+Explique:
+
+* onde ficam;
+* como são registrados;
+* como são utilizados;
+* se existe alguma convenção de nomenclatura.
+
+---
+
+# 14. Configurações e ambientes
+
+Identifique como o projeto trabalha com configurações.
+
+Verifique:
+
+* `.env`;
+* `.env.example`;
+* flavors;
+* dev/prod;
+* URLs diferentes;
+* chaves de API;
+* configurações específicas de plataforma;
+* variáveis de ambiente.
+
+Não exponha secrets no README.
+
+Se encontrar credenciais ou informações sensíveis, não copie seus valores para a documentação.
+
+Documente somente:
+
+* nome da configuração;
+* finalidade;
+* onde deve ser configurada;
+* exemplo seguro, quando apropriado.
+
+---
+
+# 15. Dependências
+
+Analise o `pubspec.yaml`.
+
+Identifique as principais dependências e explique a finalidade delas.
+
+Não é necessário explicar absolutamente todos os pacotes.
+
+Priorize aqueles que influenciam a arquitetura ou o funcionamento da aplicação.
+
+Por exemplo:
+
+* gerenciamento de estado;
+* navegação;
+* HTTP;
+* banco;
+* autenticação;
+* Firebase;
+* serialização;
+* UI;
+* armazenamento;
+* geração de código.
+
+---
+
+# 16. Testes
+
+Analise a estrutura de testes.
+
+Identifique:
+
+* testes unitários;
+* testes de widgets;
+* testes de integração;
+* mocks;
+* fixtures;
+* ferramentas utilizadas.
+
+Documente:
+
+* onde ficam;
+* como são executados;
+* quais partes possuem cobertura;
+* padrões utilizados.
+
+Se não existirem testes relevantes, informe isso claramente.
+
+Não invente cobertura de testes.
+
+---
+
+# 17. Android e iOS
+
+Analise configurações específicas das plataformas quando forem relevantes.
+
+Documente:
+
+* configurações Android importantes;
+* configurações iOS importantes;
+* permissões;
+* serviços nativos;
+* integrações externas;
+* configurações necessárias para executar o projeto.
+
+Não transforme o README em uma cópia dos arquivos nativos.
+
+Documente apenas o que for relevante para manutenção e execução do projeto.
+
+---
+
+# 18. Como executar o projeto
+
+Crie uma seção explicando como executar o projeto do zero.
+
+Inclua, quando aplicável:
+
+```bash
+flutter pub get
+flutter run
+```
+
+e outros comandos realmente necessários.
+
+Documente:
+
+* requisitos;
+* versão do Flutter/Dart, se puder ser determinada;
+* configuração de ambiente;
+* geração de código;
+* banco local;
+* serviços externos;
+* configuração Android/iOS;
+* execução de testes;
+* build.
+
+Não invente comandos.
+
+Use somente comandos confirmados pelo projeto ou pelas ferramentas utilizadas.
+
+---
+
+# 19. Como adicionar uma nova funcionalidade
+
+Esta é uma das partes mais importantes do README.
+
+Com base na arquitetura encontrada, explique um procedimento prático para implementar uma nova funcionalidade.
+
+Por exemplo:
+
+```text
+1. Criar model
+2. Criar repository
+3. Criar service
+4. Criar controller
+5. Criar tela
+6. Registrar rota
+7. Adicionar testes
+```
+
+Porém, **não utilize essa sequência como regra fixa**.
+
+Descubra primeiro como uma funcionalidade existente foi implementada.
+
+Use uma funcionalidade real do projeto como exemplo e explique o padrão encontrado.
+
+O objetivo é permitir que uma pessoa ou IA consiga desenvolver uma nova funcionalidade seguindo o padrão existente.
+
+---
+
+# 20. Funcionalidades existentes
+
+Identifique as principais funcionalidades atualmente implementadas.
+
+Para cada uma, explique resumidamente:
+
+* finalidade;
+* localização;
+* principais telas;
+* fluxo de dados;
+* serviços envolvidos;
+* persistência/API envolvida;
+* componentes importantes.
+
+Não precisa documentar cada pequeno detalhe.
+
+O objetivo é permitir que alguém novo no projeto encontre rapidamente onde uma funcionalidade está implementada.
+
+---
+
+# 21. Fluxos importantes
+
+Identifique alguns dos principais fluxos da aplicação.
+
+Por exemplo:
+
+```text
+Login
+Tela inicial
+ ↓
+Autenticação
+ ↓
+Carregamento do usuário
+ ↓
+Dashboard
+```
+
+ou:
+
+```text
+Usuário
+ ↓
+Tela
+ ↓
+Controller
+ ↓
+Repository
+ ↓
+API
+ ↓
+Model
+ ↓
+Estado
+ ↓
+Tela
+```
+
+Documente somente fluxos realmente existentes.
+
+Utilize diagramas em texto quando eles ajudarem a compreensão.
+
+---
+
+# 22. Regras e decisões arquiteturais
+
+Procure no código sinais de decisões arquiteturais importantes.
+
+Documente coisas como:
+
+* por que determinada pasta existe;
+* por que determinado padrão é utilizado;
+* onde determinada responsabilidade deve ficar;
+* quais partes são compartilhadas;
+* quais partes são específicas;
+* limitações conhecidas;
+* dependências importantes entre módulos.
+
+Não invente justificativas.
+
+Se não for possível determinar o motivo de uma decisão, descreva o comportamento sem afirmar o motivo.
+
+---
+
+# 23. Pontos de atenção
+
+Crie uma seção identificando aspectos importantes que alguém deve saber antes de modificar o projeto.
+
+Por exemplo:
+
+* código legado;
+* dependências fortemente acopladas;
+* arquivos gerados;
+* código que não deve ser editado manualmente;
+* configurações obrigatórias;
+* limitações;
+* integrações externas;
+* cuidados com banco;
+* cuidados com autenticação.
+
+Somente documente pontos encontrados durante a análise.
+
+---
+
+# 24. Qualidade da documentação
+
+O README final deve ser:
+
+* detalhado;
+* técnico;
+* organizado;
+* objetivo;
+* baseado no código real;
+* útil para manutenção;
+* útil para onboarding;
+* útil para futuras IAs.
+
+Evite:
+
+* explicações genéricas sobre Flutter;
+* conteúdo que não tenha relação com este projeto;
+* informações inventadas;
+* recomendações que não fazem parte da implementação atual;
+* textos excessivamente genéricos;
+* documentação de arquivos irrelevantes.
+
+Não transforme o README em um tutorial de Flutter.
+
+Ele deve explicar **este projeto específico**.
+
+---
+
+# 25. Regra contra suposições
+
+Se você não conseguir determinar alguma informação com segurança através do código:
+
+**não invente.**
+
+Em vez disso, utilize uma descrição como:
+
+> "Não foi possível determinar através da implementação atual."
+
+ou simplesmente não inclua a informação caso ela não seja relevante.
+
+Toda informação arquitetural importante deve poder ser relacionada a algum arquivo ou implementação existente.
+
+---
+
+# 26. Antes de escrever o README
+
+Antes de modificar o arquivo `README.md`, faça uma análise interna completa do projeto.
+
+Verifique especialmente:
+
+* estrutura de diretórios;
+* `pubspec.yaml`;
+* ponto de entrada;
+* navegação;
+* gerenciamento de estado;
+* API;
+* persistência;
+* models;
+* componentes;
+* tema;
+* configurações;
+* testes;
+* funcionalidades existentes.
+
+Depois disso, compare sua compreensão com o README atual, caso exista.
+
+Identifique informações:
+
+* corretas;
+* desatualizadas;
+* incompletas;
+* contraditórias.
+
+---
+
+# 27. Atualização do README existente
+
+Se já existir um `README.md`:
+
+* preserve informações úteis;
+* corrija informações desatualizadas;
+* complemente informações ausentes;
+* remova informações comprovadamente incorretas;
+* reorganize o documento se isso melhorar sua utilização;
+* não apague informações válidas apenas para simplificar o arquivo.
+
+O README final deve representar o estado atual do projeto.
+
+---
+
+# 28. Estrutura esperada do README final
+
+A estrutura abaixo é uma sugestão e pode ser adaptada de acordo com o que realmente existir no projeto:
+
+```text
+# Nome do projeto
+
+## Visão geral
+
+## Tecnologias
+
+## Arquitetura
+
+## Estrutura do projeto
+
+## Fluxo de inicialização
+
+## Navegação
+
+## Gerenciamento de estado
+
+## Comunicação com APIs
+
+## Persistência
+
+## Models e entidades
+
+## Componentes e widgets
+
+## Tema e identidade visual
+
+## Assets
+
+## Configuração
+
+## Dependências principais
+
+## Funcionalidades
+
+## Testes
+
+## Android e iOS
+
+## Como executar
+
+## Como adicionar uma nova funcionalidade
+
+## Fluxos importantes
+
+## Decisões arquiteturais
+
+## Pontos de atenção
+```
+
+Não é obrigatório utilizar todas essas seções.
+
+Remova as que não fizerem sentido para o projeto e adicione outras que sejam necessárias.
+
+---
+
+# 29. Validação final
+
+Depois de criar ou atualizar o README:
+
+1. Leia o README inteiro novamente.
+2. Verifique se as informações correspondem ao código.
+3. Verifique se os caminhos dos arquivos estão corretos.
+4. Verifique se os comandos apresentados existem.
+5. Verifique se os nomes das classes e diretórios estão corretos.
+6. Verifique se não foram inventadas tecnologias ou padrões.
+7. Verifique se não foram incluídas credenciais ou secrets.
+8. Verifique se a arquitetura descrita corresponde à implementação real.
+9. Verifique se uma IA conseguiria utilizar esse README para entender onde implementar uma nova funcionalidade.
+
+Ao final, apresente um resumo contendo:
+
+* principais áreas analisadas;
+* principais características da arquitetura encontrada;
+* README criado/atualizado;
+* eventuais pontos que não puderam ser determinados com segurança;
+* eventuais inconsistências encontradas no projeto.
+
+**Não faça alterações no código da aplicação.**
+
+Nesta tarefa, o objetivo é exclusivamente analisar o projeto e criar/atualizar sua documentação.

@@ -1,0 +1,288 @@
+# Atualização da documentação do projeto Flutter
+
+O projeto já possui um `README.md` com a documentação da arquitetura e funcionamento atual.
+
+Quero que você **atualize a documentação existente para refletir o estado atual do projeto**.
+
+## Regra principal
+
+Não recrie o README do zero.
+
+Primeiro:
+
+1. Leia o `README.md` atual.
+2. Analise as alterações existentes no projeto desde a documentação atual.
+3. Identifique quais partes da documentação ainda estão corretas.
+4. Identifique quais partes ficaram desatualizadas.
+5. Identifique novas funcionalidades, estruturas, dependências ou decisões arquiteturais que precisam ser documentadas.
+6. Atualize somente o que for necessário.
+
+O objetivo é manter o README como uma representação fiel da implementação atual.
+
+---
+
+## 1. Analise o estado atual
+
+Antes de modificar o README, investigue o projeto.
+
+Verifique principalmente:
+
+* estrutura de diretórios;
+* `pubspec.yaml`;
+* `lib/`;
+* `test/`;
+* ponto de entrada;
+* navegação;
+* gerenciamento de estado;
+* comunicação com APIs;
+* persistência;
+* models;
+* repositories;
+* services;
+* controllers/viewmodels/blocs/providers, caso existam;
+* widgets e componentes;
+* tema;
+* assets;
+* configurações;
+* funcionalidades existentes.
+
+Não presuma que a arquitetura permaneceu igual à documentação anterior.
+
+---
+
+## 2. Compare código e documentação
+
+Compare a implementação atual com o README.
+
+Classifique mentalmente as informações em:
+
+### Continua correta
+
+Mantenha.
+
+### Ficou desatualizada
+
+Corrija.
+
+### Está incompleta
+
+Complementar.
+
+### Está incorreta
+
+Corrija ou remova.
+
+### Nova informação
+
+Adicione.
+
+Não altere uma seção apenas para mudar sua redação se a informação continuar correta.
+
+---
+
+## 3. Preserve a documentação existente
+
+O README atual já foi elaborado com o objetivo de servir como documentação técnica para desenvolvedores e futuras IAs.
+
+Portanto:
+
+* preserve informações válidas;
+* preserve a estrutura quando ela continuar adequada;
+* preserve explicações úteis;
+* não simplifique excessivamente;
+* não remova detalhes importantes;
+* não reescreva seções sem necessidade.
+
+A atualização deve ser **incremental**.
+
+---
+
+## 4. Detecte alterações arquiteturais
+
+Dê atenção especial a alterações que mudaram a forma como o projeto funciona.
+
+Por exemplo:
+
+* nova camada;
+* novo módulo;
+* nova forma de gerenciamento de estado;
+* mudança na navegação;
+* novo mecanismo de persistência;
+* nova API;
+* mudança no sistema de autenticação;
+* novo sistema de configuração;
+* nova biblioteca que passou a ser estruturalmente importante;
+* mudança na organização de pastas.
+
+Quando uma alteração desse tipo existir, atualize a documentação arquitetural correspondente.
+
+---
+
+## 5. Novas funcionalidades
+
+Procure funcionalidades implementadas desde a documentação anterior.
+
+Para cada funcionalidade relevante:
+
+* identifique onde está implementada;
+* explique sua finalidade;
+* documente seu fluxo;
+* indique suas principais dependências;
+* atualize a seção de funcionalidades;
+* atualize a estrutura do projeto se necessário.
+
+Não documente cada detalhe de implementação.
+
+Priorize informações úteis para manutenção.
+
+---
+
+## 6. Dependências
+
+Analise o `pubspec.yaml`.
+
+Verifique se foram adicionadas ou removidas dependências relevantes.
+
+Se uma nova dependência tiver impacto arquitetural ou funcional importante, atualize a seção correspondente.
+
+Não é necessário listar novamente todas as dependências apenas porque o `pubspec.yaml` mudou.
+
+---
+
+## 7. Estrutura de diretórios
+
+Verifique se a árvore de diretórios descrita no README ainda corresponde ao projeto.
+
+Se houver:
+
+* novos diretórios;
+* diretórios removidos;
+* módulos novos;
+* arquivos movidos;
+* novas camadas;
+
+atualize a documentação.
+
+Não liste arquivos irrelevantes ou gerados automaticamente.
+
+---
+
+## 8. Fluxos
+
+Verifique se os fluxos documentados continuam correspondendo ao código.
+
+Especialmente:
+
+* inicialização;
+* autenticação;
+* navegação;
+* carregamento de dados;
+* comunicação com API;
+* persistência;
+* gerenciamento de estado.
+
+Se o fluxo mudou, atualize os diagramas ou explicações.
+
+---
+
+## 9. Como adicionar funcionalidades
+
+Essa seção é especialmente importante.
+
+Verifique se o procedimento descrito no README para adicionar uma nova funcionalidade ainda corresponde à arquitetura atual.
+
+Se a estrutura do projeto tiver mudado, atualize esse procedimento.
+
+A documentação deve permitir que um desenvolvedor ou uma IA consiga responder:
+
+> "Onde devo criar cada parte de uma nova funcionalidade?"
+
+com base na arquitetura atual.
+
+---
+
+## 10. Não invente
+
+Toda alteração na documentação deve ser baseada no projeto real.
+
+Não invente:
+
+* tecnologias;
+* padrões;
+* arquiteturas;
+* endpoints;
+* classes;
+* diretórios;
+* comandos;
+* funcionalidades;
+* regras de negócio.
+
+Se uma informação não puder ser confirmada pelo código, não a apresente como fato.
+
+---
+
+## 11. Não altere o código
+
+Nesta tarefa:
+
+**não modifique o código da aplicação.**
+
+Sua única alteração deve ser no:
+
+`README.md`
+
+Não faça refatorações.
+
+Não corrija bugs.
+
+Não reorganize arquivos.
+
+Não atualize dependências.
+
+Se encontrar problemas no projeto, apenas informe-os ao final.
+
+---
+
+## 12. Revisão final
+
+Depois de atualizar o README:
+
+1. Leia o documento inteiro.
+2. Verifique se todos os caminhos estão corretos.
+3. Verifique nomes de classes e diretórios.
+4. Verifique comandos.
+5. Verifique tecnologias.
+6. Verifique se a arquitetura descrita corresponde ao código.
+7. Verifique se nenhuma informação antiga ficou contraditória.
+8. Verifique se nenhuma informação válida foi removida sem motivo.
+9. Verifique se o README continua útil para uma futura IA.
+
+---
+
+## 13. Resultado esperado
+
+Ao finalizar:
+
+* atualize o `README.md`;
+* mantenha a documentação existente quando ainda estiver correta;
+* incorpore as alterações relevantes;
+* remova ou corrija informações desatualizadas;
+* não modifique o código da aplicação.
+
+Depois apresente um resumo:
+
+### Documentação atualizada
+
+Liste as principais seções alteradas.
+
+### Novas informações
+
+Liste funcionalidades, estruturas ou decisões adicionadas à documentação.
+
+### Informações removidas/corrigidas
+
+Liste informações que estavam desatualizadas.
+
+### Pontos de atenção
+
+Informe qualquer inconsistência ou ponto que não pôde ser determinado com segurança.

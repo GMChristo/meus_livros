@@ -1,0 +1,1 @@
+Antes de trabalhar no projeto, leia o README.md para entender a arquitetura e o estado atual da aplicação.
