@@ -1,0 +1,2 @@
+-adicionar um botao para adicionar um livro manualmente digitando o codigo isbn;
+-no modal para editar livro colocar um icone na frente do isbn para poder escanear novamnete o codigo;

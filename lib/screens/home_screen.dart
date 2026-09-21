@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<List<String>> _books = [];
   bool _loading = true;
   bool _processingScan = false;
+  bool _processingManualLookup = false;
   bool _updatingAll = false;
   String? _filePath;
 
@@ -26,6 +27,77 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _init();
+  }
+
+  Future<void> _addBookByIsbn() async {
+    final isbnController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    final isbn = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Adicionar livro por ISBN'),
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            controller: isbnController,
+            decoration: const InputDecoration(
+              labelText: 'ISBN',
+              hintText: 'Digite o número do ISBN',
+            ),
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Informe o ISBN';
+              }
+              return null;
+            },
+            onFieldSubmitted: (_) {
+              if (formKey.currentState?.validate() ?? false) {
+                Navigator.pop(ctx, isbnController.text.trim());
+              }
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancelar'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                Navigator.pop(ctx, isbnController.text.trim());
+              }
+            },
+            child: const Text('Salvar'),
+          ),
+        ],
+      ),
+    );
+
+    if (isbn == null || !mounted) return;
+
+    setState(() => _processingManualLookup = true);
+
+    try {
+      final book = await _isbnService.lookup(isbn);
+      await _excelService.addBook(book);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Adicionado: ${book.title}')),
+        );
+        await _refresh();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao adicionar livro: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _processingManualLookup = false);
+    }
   }
 
   Future<void> _init() async {
@@ -144,92 +216,125 @@ class _HomeScreenState extends State<HomeScreen> {
     final n = _books.length;
     final realIndex = (n - 1) - index;
 
-    final isbnController = TextEditingController(text: row.isNotEmpty ? row[0] : '');
-    final titleController = TextEditingController(text: row.length > 1 ? row[1] : '');
-    final subtitleController = TextEditingController(text: row.length > 2 ? row[2] : '');
-    final authorController = TextEditingController(text: row.length > 3 ? row[3] : '');
-    final publisherController = TextEditingController(text: row.length > 4 ? row[4] : '');
-    final dateController = TextEditingController(text: row.length > 5 ? row[5] : '');
-    final obsController = TextEditingController(text: row.length > 7 ? row[7] : '');
+    final isbnController =
+        TextEditingController(text: row.isNotEmpty ? row[0] : '');
+    final titleController =
+        TextEditingController(text: row.length > 1 ? row[1] : '');
+    final subtitleController =
+        TextEditingController(text: row.length > 2 ? row[2] : '');
+    final authorController =
+        TextEditingController(text: row.length > 3 ? row[3] : '');
+    final publisherController =
+        TextEditingController(text: row.length > 4 ? row[4] : '');
+    final dateController =
+        TextEditingController(text: row.length > 5 ? row[5] : '');
+    final obsController =
+        TextEditingController(text: row.length > 7 ? row[7] : '');
 
     await showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Detalhes do Livro'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: isbnController,
-                decoration: const InputDecoration(labelText: 'ISBN'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Título'),
-              ),
-              TextField(
-                controller: subtitleController,
-                decoration: const InputDecoration(labelText: 'Subtítulo'),
-              ),
-              TextField(
-                controller: authorController,
-                decoration: const InputDecoration(labelText: 'Autor'),
-              ),
-              TextField(
-                controller: publisherController,
-                decoration: const InputDecoration(labelText: 'Editora'),
-              ),
-              TextField(
-                controller: dateController,
-                decoration: const InputDecoration(labelText: 'Ano de Publicação'),
-              ),
-              TextField(
-                controller: obsController,
-                decoration: const InputDecoration(labelText: 'Observações'),
-              ),
-            ],
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Detalhes do Livro'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: isbnController,
+                        decoration: const InputDecoration(labelText: 'ISBN'),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: const Icon(Icons.qr_code_scanner),
+                      tooltip: 'Escanear ISBN',
+                      onPressed: () async {
+                        final scannedIsbn =
+                            await Navigator.of(context).push<String>(
+                          MaterialPageRoute(
+                              builder: (_) => const ScannerScreen()),
+                        );
+                        if (scannedIsbn != null && mounted) {
+                          setState(() {
+                            isbnController.text = scannedIsbn;
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: 'Título'),
+                ),
+                TextField(
+                  controller: subtitleController,
+                  decoration: const InputDecoration(labelText: 'Subtítulo'),
+                ),
+                TextField(
+                  controller: authorController,
+                  decoration: const InputDecoration(labelText: 'Autor'),
+                ),
+                TextField(
+                  controller: publisherController,
+                  decoration: const InputDecoration(labelText: 'Editora'),
+                ),
+                TextField(
+                  controller: dateController,
+                  decoration:
+                      const InputDecoration(labelText: 'Ano de Publicação'),
+                ),
+                TextField(
+                  controller: obsController,
+                  decoration: const InputDecoration(labelText: 'Observações'),
+                ),
+              ],
+            ),
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final updatedBook = Book(
-                isbn: isbnController.text,
-                title: titleController.text,
-                subtitle: subtitleController.text,
-                author: authorController.text,
-                publisher: publisherController.text,
-                publishedDate: dateController.text,
-                scannedAt: DateTime.now(),
-                obs: obsController.text,
-              );
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final updatedBook = Book(
+                  isbn: isbnController.text,
+                  title: titleController.text,
+                  subtitle: subtitleController.text,
+                  author: authorController.text,
+                  publisher: publisherController.text,
+                  publishedDate: dateController.text,
+                  scannedAt: DateTime.now(),
+                  obs: obsController.text,
+                );
 
-              try {
-                await _excelService.updateBookAt(realIndex, updatedBook);
-                if (context.mounted) {
-                  setState(() {
-                    _books[index] = updatedBook.toRow();
-                  });
-                  Navigator.pop(ctx);
-                  await _updateSingleBook(index);
+                try {
+                  await _excelService.updateBookAt(realIndex, updatedBook);
+                  if (context.mounted) {
+                    setState(() {
+                      _books[index] = updatedBook.toRow();
+                    });
+                    Navigator.pop(ctx);
+                    await _updateSingleBook(index);
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Erro ao atualizar: $e')),
+                    );
+                  }
                 }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Erro ao atualizar: $e')),
-                  );
-                }
-              }
-            },
-            child: const Text('Salvar'),
-          ),
-        ],
+              },
+              child: const Text('Salvar'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -241,7 +346,9 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Remover livro'),
         content: Text('Deseja realmente remover este livro da sua lista?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Cancelar')),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text('Remover', style: TextStyle(color: Colors.red)),
@@ -310,6 +417,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
+                : const Icon(Icons.add),
+            tooltip: 'Adicionar livro por ISBN',
+            onPressed: _addBookByIsbn,
+          ),
+          IconButton(
+            icon: _updatingAll
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Icon(Icons.refresh),
             tooltip: 'Atualizar todos os registros',
             onPressed: _updatingAll ? null : _updateAllBooks,
@@ -317,9 +435,8 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.folder_open),
             tooltip: 'Abrir arquivo Excel',
-            onPressed: _filePath == null
-                ? null
-                : () => OpenFilex.open(_filePath!),
+            onPressed:
+                _filePath == null ? null : () => OpenFilex.open(_filePath!),
           ),
         ],
       ),
@@ -366,12 +483,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.refresh, color: Colors.blue),
+                              icon:
+                                  const Icon(Icons.refresh, color: Colors.blue),
                               onPressed: () => _updateSingleBook(index),
                               tooltip: 'Atualizar este livro',
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.redAccent),
+                              icon: const Icon(Icons.delete,
+                                  color: Colors.redAccent),
                               onPressed: () => _deleteBook(index),
                             ),
                           ],
